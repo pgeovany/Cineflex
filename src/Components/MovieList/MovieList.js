@@ -17,7 +17,11 @@ export default function MovieList() {
         <div className="container">
             <p>Selecione o filme</p>
             <div className="movieList">
-                {movies.map(movie => <Movie key={movie.id} image={movie.posterURL} title={movie.title}/>)}
+                {movies.length !== 0 ?
+                    movies.map(movie => <Movie key={movie.id} image={movie.posterURL} title={movie.title}/>)
+                    :
+                    "CARREGANDO A LISTA DE FILMES"
+                }
             </div>
         </div>
     );
