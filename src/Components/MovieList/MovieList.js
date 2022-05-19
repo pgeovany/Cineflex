@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from  "axios";
-import "./style.css"
+import styled from "styled-components";
 
 export default function MovieList() {
 
@@ -14,23 +14,73 @@ export default function MovieList() {
     }, []);
 
     return (
-        <div className="container">
+        <Container>
             <p>Selecione o filme</p>
-            <div className="movieList">
+            <ListOfMovies>
                 {movies.length !== 0 ?
                     movies.map(movie => <Movie key={movie.id} image={movie.posterURL} title={movie.title}/>)
                     :
                     "CARREGANDO A LISTA DE FILMES"
                 }
-            </div>
-        </div>
+            </ListOfMovies>
+        </Container>
     );
 }
 
 function Movie({image, title}) {
     return (
-        <div className="movieBox">
+        <MoviePoster>
             <img src={image} alt={title}/>
-        </div>
+        </MoviePoster>
     );
 }
+
+
+//STYLES
+const Container = styled.div`
+    font-family: 'Roboto', sans-serif;
+    margin-top: 66px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+
+    p {
+        margin-top: 50px;
+        font-size: 24px;
+    }
+`;
+
+const ListOfMovies = styled.div`
+    margin: 36px 20px 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+`;
+
+const MoviePoster = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 146px;
+    height: 210px;
+    margin-bottom: 10px;
+    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+
+    img {
+        width: 90%;
+        height: 92%;
+    }
+
+    img:hover{
+        filter: brightness(110%);
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+`;
