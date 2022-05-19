@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from  "axios";
 import styled from "styled-components";
 
@@ -10,7 +11,7 @@ export default function MovieList() {
         const promise = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies");
         promise.then(answer => {
             setMovies([...answer.data]);
-        })
+        });
     }, []);
 
     return (
@@ -18,7 +19,7 @@ export default function MovieList() {
             <p>Selecione o filme</p>
             <ListOfMovies>
                 {movies.length !== 0 ?
-                    movies.map(movie => <Movie key={movie.id} image={movie.posterURL} title={movie.title}/>)
+                    movies.map(movie => <Movie id={movie.id} image={movie.posterURL} title={movie.title} key={movie.id}/>)
                     :
                     "CARREGANDO A LISTA DE FILMES"
                 }
@@ -27,11 +28,13 @@ export default function MovieList() {
     );
 }
 
-function Movie({image, title}) {
+function Movie({id, image, title}) {
     return (
-        <MoviePoster>
-            <img src={image} alt={title}/>
-        </MoviePoster>
+        <Link to={`/sessoes/${id}`}>
+            <MoviePoster onClick={() => console.log(id)}>
+                <img src={image} alt={title}/>
+            </MoviePoster>
+        </Link>
     );
 }
 
