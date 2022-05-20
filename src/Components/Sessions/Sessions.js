@@ -85,6 +85,10 @@ const Button = styled.button`
     font-size: 18px;
     border-radius: 3px;
     margin-right: 8px;
+
+    &:hover {
+        cursor: pointer;
+    }
 `;
 
 const Times = styled.div`
