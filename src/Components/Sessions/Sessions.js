@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from  "axios";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
+import Footer from "../shared/Footer";
 
 export default function Sessions() {
     const {movieID} = useParams();
@@ -10,19 +11,22 @@ export default function Sessions() {
     useEffect(() =>{
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${movieID}/showtimes`);
         promise.then(answer => {
-            setSessions(answer.data.days);
+            setSessions({...answer.data});
         });
-    }, [movieID])
+    }, [movieID]);
 
     return(
-        <Container>
-            <p>Selecione o horário</p>
-            {sessions.length !== 0? 
-                sessions.map(session => <AvailableSessions key={session.id} date={session.date} day={session.weekday} times={session.showtimes}/>)
-                :
-                null
-            }
-        </Container>
+        <>
+            <Container>
+                <p>Selecione o horário</p>
+                {sessions.length !== 0? 
+                    sessions.days.map(session => <AvailableSessions key={session.id} date={session.date} day={session.weekday} times={session.showtimes}/>)
+                    :
+                    null
+                }
+            </Container>
+            {sessions.length !== 0? <Footer title={sessions.title} url={sessions.posterURL}/> : null}
+        </>
     );
 }
 
@@ -45,7 +49,7 @@ function AvailableSessions({date, day, times, id}) {
 const Container = styled.div`
     font-family: 'Roboto', sans-serif;
     margin-top: 66px;
-    margin-bottom: 40px;
+    margin-bottom: calc(118px + 40px);
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
