@@ -31,7 +31,7 @@ export default function MovieList() {
 function Movie({id, image, title}) {
     return (
         <Link to={`/sessoes/${id}`}>
-            <MoviePoster onClick={() => console.log(id)}>
+            <MoviePoster>
                 <img src={image} alt={title}/>
             </MoviePoster>
         </Link>

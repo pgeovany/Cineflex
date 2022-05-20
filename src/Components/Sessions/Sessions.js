@@ -1,19 +1,18 @@
 import { useState, useEffect } from "react";
 import axios from  "axios";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 export default function Sessions() {
     const {movieID} = useParams();
     const [sessions, setSessions] = useState([]);
-    //console.log(movieID);
     
     useEffect(() =>{
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${movieID}/showtimes`);
         promise.then(answer => {
             setSessions(answer.data.days);
         });
-    }, [])
+    }, [movieID])
 
     return(
         <Container>
@@ -32,7 +31,11 @@ function AvailableSessions({date, day, times, id}) {
         <div>
             <h2>{day} - {date}</h2>
             <Times>
-                {times.map(time => <Button onClick={() => console.log(time.id)} key={time.id}>{time.name}</Button>)}
+                {times.map(time => 
+                    <Link key={time.id} to={`/assentos/${time.id}`}>
+                        <Button key={time.id}>{time.name}</Button>
+                    </Link>
+                )}
             </Times>
         </div>
     );
