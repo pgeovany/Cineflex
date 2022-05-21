@@ -17,8 +17,33 @@ export default function CurrentSession() {
         });
     }, [sessionID]);
 
-    if(currentSession.length !== 0) {
-        console.log(currentSession);
+
+    function selectSeat(i, isAvailable, isSelected) {
+
+        if(!isAvailable && !isSelected) {
+            alert("Esse assento não está disponível!");
+            return;
+        }
+
+        let newSeats = currentSession.seats.map((seat, index) => {
+            if((seat.isAvailable && index === i) || (seat.isSelected && index === i)) {
+                return {
+                    ...seat,
+                    isAvailable: !seat.isAvailable,
+                    isSelected: !seat.isSelected
+                }
+            } 
+            else {
+                return {
+                    ...seat,
+                }
+            }
+        });
+        setCurrentSession({
+            ...currentSession,
+            seats: [...newSeats]
+        });
+        //console.log(currentSession.seats);
     }
 
     return(
@@ -29,10 +54,13 @@ export default function CurrentSession() {
                     {!currentSession.length !== 0 && currentSession.seats ?
                         currentSession.seats.map((seat, index) => 
                         <Seat 
+                            index={index}
                             key={index}
                             id={seat.id}
                             number={seat.name}
                             isAvailable={seat.isAvailable}
+                            isSelected={seat.isSelected}
+                            selectSeat={selectSeat}
                         />) 
                        : 
                        null
@@ -54,9 +82,21 @@ export default function CurrentSession() {
     );
 }
 
-function Seat({id, number, isAvailable}) {
+function Seat({index, id, number, isAvailable, isSelected, selectSeat}) {
+
+    let background = "#FBE192";
+    let border = "#F7C52B";
+
+    if(isAvailable) {
+        background = "#C3CFD9";
+        border = "#808F9D";
+    } else if(isSelected) {
+        background = "#8DD7CF";
+        border = "#45BDB0";
+    }
+
     return(
-        <IndividualSeat isAvailable={isAvailable} onClick={() => console.log(id)}>
+        <IndividualSeat background={background} border={border} onClick={() => selectSeat(index, isAvailable, isSelected)}>
             {number < 10 ? `0${number}` : number}
         </IndividualSeat>
     );
@@ -128,8 +168,8 @@ const SeatsList = styled.div`
 const IndividualSeat = styled.div`
     height: 26px;
     width: 26px;
-    background-color: ${props => props.isAvailable ? "#C3CFD9" : "#FBE192"};
-    border: 1px solid ${props => props.isAvailable ? "#C3CFD9" : "#F7C52B"};
+    background-color: ${props => props.background};
+    border: 1px solid ${props => props.border};
     border-radius: 50%;
     display: flex;
     align-items: center;
