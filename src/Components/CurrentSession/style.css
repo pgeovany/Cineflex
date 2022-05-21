@@ -1,0 +1,24 @@
+.subtitle {
+    height: 26px;
+    width: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.selected {
+    background-color: #8DD7CF !important;
+    border: 1px solid #1AAE9E !important;
+}
+
+.available {
+    background-color: #C3CFD9;
+    border: 1px solid #7B8B99;
+}
+
+.ocupied {
+    background-color: #FBE192;
+    border: 1px solid #F7C52B;
+}
