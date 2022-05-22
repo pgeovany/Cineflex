@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from  "axios";
 import styled from "styled-components";
+import Loading from "../shared/Loading";
 
 export default function MovieList() {
 
@@ -21,7 +22,7 @@ export default function MovieList() {
                 {movies.length !== 0 ?
                     movies.map(movie => <Movie id={movie.id} image={movie.posterURL} title={movie.title} key={movie.id}/>)
                     :
-                    "CARREGANDO A LISTA DE FILMES"
+                   <Loading />
                 }
             </ListOfMovies>
         </Container>
@@ -37,7 +38,6 @@ function Movie({id, image, title}) {
         </Link>
     );
 }
-
 
 //STYLES
 const Container = styled.div`

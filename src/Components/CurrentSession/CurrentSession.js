@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Footer from "../shared/Footer";
 import styled from "styled-components";
+import Loading from "../shared/Loading";
 import "./style.css"
 
 export default function CurrentSession() {
@@ -93,7 +94,7 @@ export default function CurrentSession() {
             <Container>
                 <p>Selecione o(s) assento(s)</p>
                 <SeatsList>
-                    {!currentSession.length !== 0 && currentSession.seats ?
+                    {currentSession.length !== 0 && currentSession.seats ?
                         currentSession.seats.map((seat, index) => 
                         <Seat 
                             index={index}
@@ -108,8 +109,14 @@ export default function CurrentSession() {
                        null
                     }
                 </SeatsList>
-                <Subtitles />
-                <Form submit={buySeats} name={name} setName={setName} cpf={cpf} setCPF={setCPF}/>
+                {currentSession.seats ? 
+                    <>
+                        <Subtitles />
+                        <Form submit={buySeats} name={name} setName={setName} cpf={cpf} setCPF={setCPF}/>
+                    </>
+                    :
+                    <Loading />
+                }
             </Container>
             { currentSession.length !== 0 ?
                 <Footer
@@ -118,7 +125,8 @@ export default function CurrentSession() {
                     day={currentSession.day.weekday}
                     time={currentSession.name}
                 />    
-                : null
+                : 
+                null
             }
         </>
     );

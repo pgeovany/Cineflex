@@ -3,6 +3,7 @@ import axios from  "axios";
 import styled from "styled-components";
 import { useParams, Link } from "react-router-dom";
 import Footer from "../shared/Footer";
+import Loading from "../shared/Loading";
 
 export default function Sessions() {
     const {movieID} = useParams();
@@ -22,7 +23,7 @@ export default function Sessions() {
                 {sessions.length !== 0? 
                     sessions.days.map(session => <AvailableSessions key={session.id} date={session.date} day={session.weekday} times={session.showtimes}/>)
                     :
-                    null
+                    <Loading />
                 }
             </Container>
             {sessions.length !== 0? <Footer title={sessions.title} url={sessions.posterURL}/> : null}
