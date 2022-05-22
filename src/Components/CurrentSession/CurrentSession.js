@@ -160,12 +160,14 @@ function Form({submit, name, setName, cpf, setCPF}) {
                 <label htmlFor="name">Nome do comprador:</label>
                 <Input required value={name}
                     onChange={(e) => setName(e.target.value)}
-                    type="text" id="name" placeholder="Digite seu nome..."></Input>
+                    type="text" id="name" placeholder="Digite seu nome...">
+                </Input>
 
                 <label htmlFor="cpf">CPF do comprador:</label>
-                <Input required value={cpf} maxlength="11"
-                    onChange={(e) => setCPF(e.target.value)}
-                    type="number" id="cpf" placeholder="Digite seu cpf..."></Input>
+                <Input required value={cpf} maxLength="11"
+                    onChange={(e) => setCPF(e.target.value.slice(0, e.target.maxLength))}
+                    type="number" id="cpf" placeholder="Digite seu cpf...">     
+                </Input>
 
                 <div>
                     <Button type="submit">Reservar assento(s)</Button>
