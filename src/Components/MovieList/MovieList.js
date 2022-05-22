@@ -11,7 +11,7 @@ export default function MovieList() {
         const promise = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies");
         promise.then(answer => {
             setMovies([...answer.data]);
-        });
+        }).catch(() => console.log("Erro ao carregar a lista de filmes!"));;
     }, []);
 
     return (

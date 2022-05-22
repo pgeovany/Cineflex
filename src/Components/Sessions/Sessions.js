@@ -12,7 +12,7 @@ export default function Sessions() {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${movieID}/showtimes`);
         promise.then(answer => {
             setSessions({...answer.data});
-        });
+        }).catch(() => console.log("Erro ao carregar a lista de sessões!"));
     }, [movieID]);
 
     return(

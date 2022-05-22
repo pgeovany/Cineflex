@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Footer from "../shared/Footer";
@@ -9,12 +9,15 @@ export default function CurrentSession() {
 
     const { sessionID } = useParams();
     const [currentSession, setCurrentSession] = useState([]);
+    const [name, setName] = useState("");
+    const [cpf, setCPF] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() =>{
         const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${sessionID}/seats`);
         promise.then(answer => {
             setCurrentSession({...answer.data});
-        });
+        }).catch(() => console.log("Erro ao carregar a lista de assentos!"));
     }, [sessionID]);
 
 
@@ -43,7 +46,46 @@ export default function CurrentSession() {
             ...currentSession,
             seats: [...newSeats]
         });
-        //console.log(currentSession.seats);
+    }
+
+    function buySeats(e) {
+        e.preventDefault();
+        const ids = [];
+        const userSeats = [];
+
+        currentSession.seats.map(seat => {
+            if(seat.isSelected) {
+                ids.push(seat.id);
+                userSeats.push(seat.name);
+                return true;
+            }
+            return false;   
+        });
+
+        if(ids.length === 0) {
+            alert("Selecione pelo menos um assento!");
+            return;
+        }
+
+        const order = {
+            ids,
+            name,
+            cpf
+        }
+        const request = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", order);
+        request.then(() => {
+            navigate("/sucesso", {
+                state: {
+                    movie: currentSession.movie.title,
+                    date: currentSession.day.date,
+                    time: currentSession.name,
+                    seats: userSeats,
+                    name,
+                    cpf
+                }
+            });
+        }).catch(() => console.log("Erro ao reservar os assentos"));
+
     }
 
     return(
@@ -67,7 +109,7 @@ export default function CurrentSession() {
                     }
                 </SeatsList>
                 <Subtitles />
-                <Form />
+                <Form submit={buySeats} name={name} setName={setName} cpf={cpf} setCPF={setCPF}/>
             </Container>
             { currentSession.length !== 0 ?
                 <Footer
@@ -102,14 +144,21 @@ function Seat({index, id, number, isAvailable, isSelected, selectSeat}) {
     );
 }
 
-function Form() {
+function Form({submit, name, setName, cpf, setCPF}) {
     return (
         <UserInfo>
-            <form>
-                <label for="name">Nome do comprador:</label>
-                <Input type="text" id="name" placeholder="Digite seu nome..."></Input>
-                <label for="name">CPF do comprador:</label>
-                <Input type="number" placeholder="Digite seu CPF..."></Input>
+            <form onSubmit={submit}>
+
+                <label htmlFor="name">Nome do comprador:</label>
+                <Input required value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    type="text" id="name" placeholder="Digite seu nome..."></Input>
+
+                <label htmlFor="cpf">CPF do comprador:</label>
+                <Input required value={cpf} maxlength="11"
+                    onChange={(e) => setCPF(e.target.value)}
+                    type="number" id="cpf" placeholder="Digite seu cpf..."></Input>
+
                 <div>
                     <Button type="submit">Reservar assento(s)</Button>
                 </div>
