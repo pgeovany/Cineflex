@@ -34,6 +34,10 @@ const Logo = styled.div`
     top: 0;
     left: 0;
 
+    h1:hover, ion-icon:hover {
+        cursor: pointer;
+    }
+
     ion-icon {
         position: fixed;
         left: 5%;

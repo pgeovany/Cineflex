@@ -21,7 +21,6 @@ export default function CurrentSession() {
         }).catch(() => console.log("Erro ao carregar a lista de assentos!"));
     }, [sessionID]);
 
-
     function selectSeat(i, isAvailable, isSelected) {
 
         if(!isAvailable && !isSelected) {
@@ -236,6 +235,11 @@ const IndividualSeat = styled.div`
     font-size: 11px;
     margin-right: 6px;
     margin-bottom: 18px;
+
+    &:hover {
+        cursor: pointer;
+        filter: brightness(110%);
+    }
 `;
 
 const TypeOfSeats = styled.div`
